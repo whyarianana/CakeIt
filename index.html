@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CakeIt</title>
+    <style>
+        :root {
+            --ivory: #FFFFF0;
+            --brown: #4E342E;
+            --beige: #F5E6D3;
+            --gray: #F8F8F8;
+            --green: #4CAF50;
+            --red: #F44336;
+            --shadow: 0 8px 16px rgba(0,0,0,0.08);
+            --radius: 16px;
+            --font: 'Segoe UI', Arial, sans-serif;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font);
+        }
+
+        body {
+            background-color: var(--gray);
+            color: var(--brown);
+            line-height: 1.6;
+        }
+
+        .hidden { display: none !important; }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .btn {
+            background-color: var(--brown);
+            color: var(--ivory);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(78, 52, 46, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--brown);
+            color: var(--brown);
+        }
+
+        .btn-outline:hover {
+            background: var(--brown);
+            color: var(--ivory);
+        }
+
+        .card {
+            background: var(--ivory);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+
+        header {
+            background: var(--ivory);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--brown);
+            cursor: pointer;
+            letter-spacing: -0.5px;
+        }
+
+        nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        nav a {
+            color: var(--brown);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            background: var(--beige);
+        }
+
+        section {
+            min-height: calc(100vh - 160px);
+            padding: 40px 20px;
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--beige), var(--ivory));
+            padding: 80px 20px;
+            border-radius: var(--radius);
+            margin-bottom: 50px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            color: #665;
+        }
+
+        .hero .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filters input, .filters select {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+            font-size: 16px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .filters input:focus, .filters select:focus {
+            border-color: var(--brown);
+            box-shadow: 0 0 0 2px var(--beige);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: var(--beige);
+        }
+
+        .product-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-info h3 { margin-bottom: 10px; }
+        .product-info p { font-size: 14px; color: #666; margin-bottom: 15px; flex-grow: 1; }
+        .product-info .price { font-size: 22px; font-weight: bold; color: var(--brown); margin-bottom: 15px; }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; outline: none; transition: var(--transition);
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: var(--brown);
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        .cart-item:last-child { border-bottom: none; }
+        .cart-item .controls { display: flex; align-items: center; gap: 15px; }
+        .cart-item .controls button { padding: 5px 12px; font-size: 18px; border-radius: 6px; }
+        .cart-total { font-size: 24px; font-weight: bold; text-align: right; margin-top: 20px; padding-top: 20px; border-top: 2px solid #eee; }
+
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+            display: flex; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content {
+            background: var(--ivory); padding: 40px; border-radius: var(--radius);
+            width: 90%; max-width: 500px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .toast {
+            position: fixed; bottom: 30px; right: 30px;
+            background: var(--brown); color: var(--ivory);
+            padding: 15px 30px; border-radius: 8px; box-shadow: var(--shadow);
+            z-index: 2000; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            opacity: 0; transform: translateY(20px); pointer-events: none;
+            font-weight: 600;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+
+        footer { background: var(--brown); color: var(--ivory); text-align: center; padding: 30px 20px; margin-top: 40px; }
+
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 15px; border-bottom: 1px solid #eee; text-align: left; }
+        th { background: var(--beige); color: var(--brown); font-weight: bold; }
+        tr:hover td { background: var(--gray); }
+        
+        .badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; }
+        .bg-pending { background: #FFE082; color: #FF8F00; }
+        .bg-confirmed { background: #90CAF9; color: #1565C0; }
+        .bg-prep { background: #CE93D8; color: #6A1B9A; }
+        .bg-way { background: #FFCC80; color: #E65100; }
+        .bg-delivered { background: #A5D6A7; color: #2E7D32; }
+
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { text-align: center; padding: 30px; cursor: pointer; }
+        .stat-card h3 { font-size: 18px; color: #666; margin-bottom: 10px; }
+        .stat-card p { font-size: 32px; font-weight: 800; color: var(--brown); }
+
+        .payment-qr { background: #fff; padding: 20px; border-radius: 12px; border: 2px dashed #ccc; margin-top: 20px; }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; padding: 15px; }
+            nav { flex-wrap: wrap; justify-content: center; }
+            .hero { padding: 40px 15px; }
+            .hero h1 { font-size: 32px; }
+            .hero .buttons { flex-direction: column; }
+            .cart-item { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .cart-item .controls { width: 100%; justify-content: space-between; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="ui.navigate('home')">CakeIt</div>
+        <nav id="main-nav"></nav>
+    </header>
+
+    <div id="toast" class="toast">Mensaje</div>
+
+    <div id="modal" class="modal hidden">
+        <div class="modal-content" id="modal-content"></div>
+    </div>
+
+    <!-- LANDING PAGE -->
+    <section id="home" class="active">
+        <div class="container">
+            <div class="hero">
+                <h1>Los mejores bocaditos para tus momentos especiales</h1>
+                <p>Encuentra la selección perfecta para cumpleaños, reuniones, eventos y más.</p>
+                <div class="buttons">
+                    <button class="btn" onclick="ui.navigate('catalog')">Ver catálogo</button>
+                    <button class="btn btn-outline" id="btn-hero-login" onclick="ui.navigate('login')">Registrarse</button>
+                </div>
+            </div>
+            
+            <h2 class="section-title">Productos Destacados</h2>
+            <div class="grid" id="featured-products"></div>
+            
+            <div style="margin-top: 60px;"></div>
+            
+            <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+            <div class="grid" id="home-comments"></div>
+        </div>
+    </section>
+
+    <!-- LOGIN / REGISTER -->
+    <section id="login">
+        <div class="container" style="max-width: 450px;">
+            <div class="card">
+                <h2 id="login-title" class="section-title">Iniciar Sesión</h2>
+                <div id="login-form">
+                    <div class="form-group">
+                        <label>Teléfono o Usuario</label>
+                        <input type="text" id="login-phone" placeholder="Ej: 999888777">
+                    </div>
+                    <div class="form-group hidden" id="login-pass-group">
+                        <label>Contraseña (Solo Admin)</label>
+                        <input type="password" id="login-password" placeholder="••••••••">
+                    </div>
+                    <button class="btn" style="width: 100%" onclick="auth.login()">Ingresar</button>
+                    <p style="margin-top: 20px; text-align: center;">
+                        ¿No tienes cuenta? <a href="javascript:void(0)" onclick="ui.toggleAuth(true)" style="color:var(--brown); font-weight:bold;">Regístrate aquí</a>
+                    </p>
+                </div>
+                
+                <div id="register-form" class="hidden">
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" id="reg-name" placeholder="Tu nombre">
+                    </div>
+                    <div class="form-group">
+                        <label>Número de Teléfono</label>
+                        <input type="tel" id="reg-phone" placeholder="Tu teléfono móvil">
+                    </div>
+                    <div class="form-group">
+                        <label>Dirección de Entrega (Opcional)</label>
+                        <input type="text" id="reg-address" placeholder="Ej: Av. Principal 123">
+                    </div>
+                    <button class="btn" style="width: 100%" onclick="auth.register()">Crear Cuenta</button>
+                    <p style="margin-top: 20px; text-align: center;">
+                        ¿Ya tienes cuenta? <a href="javascript:void(0)" onclick="ui.toggleAuth(false)" style="color:var(--brown); font-weight:bold;">Inicia sesión</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATALOG -->
+    <section id="catalog">
+        <div class="container">
+            <h2 class="section-title">Nuestro Catálogo</h2>
+            <div class="filters">
+                <input type="text" id="search-input" placeholder="Buscar por nombre o descripción..." onkeyup="products.filter()">
+                <select id="category-filter" onchange="products.filter()">
+                    <option value="">Todas las categorías</option>
+                    <option value="dulce">Dulces y Postres</option>
+                    <option value="salado">Bocaditos Salados</option>
+                    <option value="box">Cajas / Combos</option>
+                </select>
+            </div>
+            <div class="grid" id="product-list"></div>
+        </div>
+    </section>
+
+    <!-- CART -->
+    <section id="cart">
+        <div class="container" style="max-width: 800px;">
+            <h2 class="section-title">Tu Carrito de Compras</h2>
+            <div class="card" id="cart-content">
+                <!-- Cart items rendered here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CHECKOUT -->
+    <section id="checkout">
+        <div class="container" style="max-width: 600px;">
+            <div class="card">
+                <h2 class="section-title">Completar Pedido</h2>
+                <div class="form-group">
+                    <label>Fecha del evento / entrega</label>
+                    <input type="date" id="order-date">
+                </div>
+                <div class="form-group">
+                    <label>Hora de entrega</label>
+                    <input type="time" id="order-time">
+                </div>
+                <div class="form-group">
+                    <label>Dirección exacta de entrega</label>
+                    <input type="text" id="order-address">
+                </div>
+                <div class="form-group">
+                    <label>Notas especiales (Alergias, dedicatorias, etc.)</label>
+                    <textarea id="order-notes" rows="3" placeholder="Opcional"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Método de Pago</label>
+                    <select id="order-payment" onchange="orders.showPaymentInfo()">
+                        <option value="">Selecciona un método...</option>
+                        <option value="Yape">Yape</option>
+                        <option value="Plin">Plin</option>
+                        <option value="Transferencia">Transferencia Bancaria</option>
+                    </select>
+                </div>
+                
+                <div id="payment-info" class="hidden payment-qr text-center">
+                    <!-- Dynamic info -->
+                </div>
+                
+                <button class="btn" style="width: 100%; margin-top: 20px; font-size:18px;" onclick="orders.placeOrder()">Confirmar y Pagar</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- USER DASHBOARD -->
+    <section id="user-dashboard">
+        <div class="container">
+            <h2 id="user-welcome" class="section-title" style="text-align: left;">Bienvenido</h2>
+            
+            <div class="dashboard-grid">
+                <div class="card stat-card" onclick="ui.navigate('catalog')">
+                    <h3>Hacer un Pedido</h3>
+                    <p>+</p>
+                </div>
+                <div class="card stat-card" onclick="ui.navigate('history')">
+                    <h3>Mis Compras</h3>
+                    <p>📋</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Pedido en Curso</h3>
+                <div id="active-order" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ORDER HISTORY -->
+    <section id="history">
+        <div class="container">
+            <h2 class="section-title">Historial de Pedidos</h2>
+            <div class="card table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nº Pedido</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-list"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ADMIN DASHBOARD -->
+    <section id="admin-dashboard">
+        <div class="container">
+            <h2 class="section-title">Panel de Administración</h2>
+            
+            <div class="dashboard-grid">
+                <div class="card stat-card">
+                    <h3>Clientes Registrados</h3>
+                    <p id="admin-stats-clients">0</p>
+                </div>
+                <div class="card stat-card">
+                    <h3>Pedidos Totales</h3>
+                    <p id="admin-stats-orders">0</p>
+                </div>
+                <div class="card stat-card">
+                    <h3>Ingresos Totales</h3>
+                    <p id="admin-stats-sales">S/ 0</p>
+                </div>
+            </div>
+            
+            <div class="card table-responsive">
+                <h3>Gestión de Pedidos</h3>
+                <table style="margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Total</th>
+                            <th>Estado Actual</th>
+                            <th>Cambiar Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-orders-list"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 CakeIt - Creado con pasión. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        /**
+         * INITIALIZATION & DATA
+         */
+        const DB_KEY = 'cakeit_db';
+
+        const defaultData = {
+            users: [],
+            products: [
+                { id: 1, name: 'Mini Sánguches de Pollo', price: 25, category: 'salado', desc: 'Docena de mini sánguches con pollo deshilachado, mayonesa casera y apio.', img: 'https://images.unsplash.com/photo-1619860860774-1e2e1734f1cc?auto=format&fit=crop&q=80&w=400' },
+                { id: 2, name: 'Brownies Melcochudos Box', price: 30, category: 'dulce', desc: 'Caja de 6 brownies con nueces y una textura perfectamente melcochuda.', img: 'https://images.unsplash.com/photo-1461009312844-e80697aaba9c?auto=format&fit=crop&q=80&w=400' },
+                { id: 3, name: 'Cupcakes Decorados x6', price: 35, category: 'dulce', desc: 'Cupcakes de vainilla o chocolate con frosting de queso crema.', img: 'https://images.unsplash.com/photo-1486427944299-d1955d23e34d?auto=format&fit=crop&q=80&w=400' },
+                { id: 4, name: 'Tequeños con Guacamole', price: 28, category: 'salado', desc: '20 unidades de tequeños rellenos de queso, listos para dipear.', img: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=400' },
+                { id: 5, name: 'Alfajores Premium', price: 22, category: 'dulce', desc: 'Caja de 15 mini alfajores de maicena rellenos de abundante manjar blanco.', img: 'https://images.unsplash.com/photo-1610444589279-d3fb153df757?auto=format&fit=crop&q=80&w=400' },
+                { id: 6, name: 'Tartaletas de Frutas', price: 38, category: 'dulce', desc: 'Docena de mini tartaletas con crema pastelera y frutas frescas de estación.', img: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&q=80&w=400' },
+                { id: 7, name: 'Combo Fiesta Básica', price: 85, category: 'box', desc: 'Incluye 2 docenas de salados y 2 docenas de dulces a elección.', img: 'https://images.unsplash.com/photo-1558961363-a0c87cea1596?auto=format&fit=crop&q=80&w=400' }
+            ],
+            orders: [],
+            cart: [],
+            comments: [
+                { user: 'María González', rating: 5, text: '¡Los brownies son increíbles! Muy recomendados para cualquier reunión, todos mis invitados quedaron encantados.' },
+                { user: 'Juan Pérez', rating: 4, text: 'Llegó todo a tiempo y muy bien presentado. Los sánguches estaban fresquitos.' },
+                { user: 'Lucía Torres', rating: 5, text: 'Pedí el combo fiesta y fue un éxito. Excelente servicio.' }
+            ],
+            currentUser: null
+        };
+
+        const storage = {
+            get: () => {
+                const data = localStorage.getItem(DB_KEY);
+                return data ? JSON.parse(data) : defaultData;
+            },
+            set: (data) => {
+                localStorage.setItem(DB_KEY, JSON.stringify(data));
+            }
+        };
+
+        /**
+         * UI MODULE
+         */
+        const ui = {
+            toastTimeout: null,
+            navigate: (sectionId) => {
+                document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+                document.getElementById(sectionId).classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Triggers
+                if(sectionId === 'catalog') products.render();
+                if(sectionId === 'cart') cart.render();
+                if(sectionId === 'history') orders.renderHistory();
+                if(sectionId === 'admin-dashboard') admin.render();
+                if(sectionId === 'user-dashboard') auth.renderDashboard();
+            },
+            showToast: (msg) => {
+                const toast = document.getElementById('toast');
+                toast.textContent = msg;
+                toast.classList.add('show');
+                if(ui.toastTimeout) clearTimeout(ui.toastTimeout);
+                ui.toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
+            },
+            showModal: (content) => {
+                document.getElementById('modal-content').innerHTML = content;
+                document.getElementById('modal').classList.remove('hidden');
+            },
+            closeModal: () => {
+                document.getElementById('modal').classList.add('hidden');
+            },
+            updateNav: () => {
+                const db = storage.get();
+                const nav = document.getElementById('main-nav');
+                let html = `<a onclick="ui.navigate('catalog')">Catálogo</a>`;
+                
+                if (db.currentUser) {
+                    if (db.currentUser.role === 'admin') {
+                        html += `<a onclick="ui.navigate('admin-dashboard')">Panel Admin</a>`;
+                    } else {
+                        html += `<a onclick="ui.navigate('user-dashboard')">Mi Panel</a>`;
+                        html += `<a onclick="ui.navigate('cart')">Carrito (${db.cart.length})</a>`;
+                    }
+                    html += `<a onclick="auth.logout()">Salir</a>`;
+                } else {
+                    html += `<a onclick="ui.navigate('cart')">Carrito (${db.cart.length})</a>`;
+                    html += `<a onclick="ui.navigate('login')">Ingresar</a>`;
+                }
+                nav.innerHTML = html;
+                
+                const heroBtn = document.getElementById('btn-hero-login');
+                if (heroBtn) heroBtn.style.display = db.currentUser ? 'none' : 'inline-block';
+            },
+            toggleAuth: (isRegister) => {
+                document.getElementById('login-form').classList.toggle('hidden', isRegister);
+                document.getElementById('register-form').classList.toggle('hidden', !isRegister);
+                document.getElementById('login-title').textContent = isRegister ? 'Crear Cuenta' : 'Iniciar Sesión';
+            },
+            renderComments: () => {
+                const db = storage.get();
+                const container = document.getElementById('home-comments');
+                if (!container) return;
+                container.innerHTML = '';
+                
+                const recent = db.comments.slice(-3).reverse();
+                recent.forEach(c => {
+                    const stars = '⭐'.repeat(c.rating);
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <h4 style="margin-bottom:5px;">${c.user}</h4>
+                        <div style="margin-bottom:10px;">${stars}</div>
+                        <p style="font-style:italic; color:#555;">"${c.text}"</p>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        };
+
+        /**
+         * AUTH MODULE
+         */
+        const auth = {
+            login: () => {
+                const phone = document.getElementById('login-phone').value.trim();
+                const pass = document.getElementById('login-password').value.trim();
+                
+                if (!phone) return ui.showToast('Ingresa tu teléfono o usuario');
+                
+                const db = storage.get();
+                
+                // Admin Login Logic
+                if (phone === 'admin') {
+                    const passGroup = document.getElementById('login-pass-group');
+                    if (passGroup.classList.contains('hidden')) {
+                        passGroup.classList.remove('hidden');
+                        return; // Wait for user to type password
+                    }
+                    
+                    if (pass === 'admin123') {
+                        db.currentUser = { name: 'Administrador', role: 'admin' };
+                        storage.set(db);
+                        ui.updateNav();
+                        ui.showToast('Bienvenido al panel de control');
+                        passGroup.classList.add('hidden');
+                        document.getElementById('login-password').value = '';
+                        document.getElementById('login-phone').value = '';
+                        ui.navigate('admin-dashboard');
+                        return;
+                    } else {
+                        return ui.showToast('Contraseña de administrador incorrecta');
+                    }
+                }
+
+                // Client Login Logic
+                const user = db.users.find(u => u.phone === phone);
+                if (user) {
+                    db.currentUser = user;
+                    storage.set(db);
+                    ui.updateNav();
+                    document.getElementById('login-phone').value = '';
+                    ui.showToast(`¡Hola de nuevo, ${user.name}!`);
+                    ui.navigate('user-dashboard');
+                } else {
+                    ui.showToast('Usuario no encontrado. Por favor, regístrate.');
+                }
+            },
+            register: () => {
+                const name = document.getElementById('reg-name').value.trim();
+                const phone = document.getElementById('reg-phone').value.trim();
+                const address = document.getElementById('reg-address').value.trim();
+                
+                if (!name || !phone) return ui.showToast('El nombre y teléfono son obligatorios');
+                
+                const db = storage.get();
+                if (db.users.find(u => u.phone === phone) || phone === 'admin') {
+                    return ui.showToast('Este teléfono ya está registrado');
+                }
+                
+                const newUser = { name, phone, address, role: 'user' };
+                db.users.push(newUser);
+                db.currentUser = newUser;
+                storage.set(db);
+                
+                // Clear fields
+                document.getElementById('reg-name').value = '';
+                document.getElementById('reg-phone').value = '';
+                document.getElementById('reg-address').value = '';
+                
+                ui.updateNav();
+                ui.showToast('¡Registro exitoso! Bienvenido a CakeIt.');
+                ui.navigate('user-dashboard');
+            },
+            logout: () => {
+                const db = storage.get();
+                db.currentUser = null;
+                storage.set(db);
+                ui.updateNav();
+                ui.navigate('home');
+                ui.showToast('Has cerrado sesión correctamente');
+            },
+            renderDashboard: () => {
+                const db = storage.get();
+                if (!db.currentUser || db.currentUser.role === 'admin') return;
+                
+                document.getElementById('user-welcome').textContent = `Hola, ${db.currentUser.name}`;
+                
+                const activeOrder = db.orders.find(o => o.phone === db.currentUser.phone && o.status !== 'Entregado');
+                const container = document.getElementById('active-order');
+                
+                if (activeOrder) {
+                    container.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+                            <div>
+                                <strong style="font-size:18px;">Pedido #${activeOrder.id}</strong><br>
+                                <span style="color:#666;">${activeOrder.date} - ${activeOrder.time}</span><br>
+                                Estado: <span class="badge bg-${orders.getStatusClass(activeOrder.status)}">${activeOrder.status}</span>
+                            </div>
+                            <div style="font-size:24px; font-weight:bold; color:var(--brown);">
+                                S/ ${activeOrder.total}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = '<p style="color:#666;">No tienes pedidos en curso en este momento.</p>';
+                }
+            }
+        };
+
+        /**
+         * PRODUCTS MODULE
+         */
+        const products = {
+            render: (list = null) => {
+                const db = storage.get();
+                const renderList = list || db.products;
+                const container = document.getElementById('product-list');
+                container.innerHTML = '';
+                
+                if (renderList.length === 0) {
+                    container.innerHTML = '<p style="grid-column: 1/-1; text-align:center; font-size:18px;">No se encontraron productos.</p>';
+                    return;
+                }
+                
+                renderList.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'card product-card';
+                    card.innerHTML = `
+                        <img src="${p.img}" alt="${p.name}">
+                        <div class="product-info">
+                            <h3>${p.name}</h3>
+                            <p>${p.desc}</p>
+                            <div class="price">S/ ${p.price}</div>
+                            <button class="btn" style="width: 100%" onclick="cart.add(${p.id})">Agregar al Carrito</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            },
+            filter: () => {
+                const q = document.getElementById('search-input').value.toLowerCase();
+                const cat = document.getElementById('category-filter').value;
+                const db = storage.get();
+                
+                const filtered = db.products.filter(p => {
+                    const matchQ = p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q);
+                    const matchCat = cat === '' || p.category === cat;
+                    return matchQ && matchCat;
+                });
+                
+                products.render(filtered);
+            },
+            renderFeatured: () => {
+                const db = storage.get();
+                const container = document.getElementById('featured-products');
+                container.innerHTML = '';
+                
+                db.products.slice(0, 3).forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'card product-card';
+                    card.innerHTML = `
+                        <img src="${p.img}" alt="${p.name}">
+                        <div class="product-info">
+                            <h3>${p.name}</h3>
+                            <div class="price">S/ ${p.price}</div>
+                            <button class="btn" style="width: 100%" onclick="cart.add(${p.id})">Agregar al Carrito</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        };
+
+        /**
+         * CART MODULE
+         */
+        const cart = {
+            add: (id) => {
+                const db = storage.get();
+                const prod = db.products.find(p => p.id === id);
+                if (!prod) return;
+                
+                const existing = db.cart.find(c => c.id === id);
+                if (existing) {
+                    existing.qty += 1;
+                } else {
+                    db.cart.push({ ...prod, qty: 1 });
+                }
+                
+                storage.set(db);
+                ui.updateNav();
+                ui.showToast(`${prod.name} agregado al carrito`);
+            },
+            updateQty: (id, change) => {
+                const db = storage.get();
+                const item = db.cart.find(c => c.id === id);
+                if (item) {
+                    item.qty += change;
+                    if (item.qty <= 0) {
+                        db.cart = db.cart.filter(c => c.id !== id);
+                    }
+                    storage.set(db);
+                    cart.render();
+                    ui.updateNav();
+                }
+            },
+            remove: (id) => {
+                const db = storage.get();
+                db.cart = db.cart.filter(c => c.id !== id);
+                storage.set(db);
+                cart.render();
+                ui.updateNav();
+                ui.showToast('Producto eliminado del carrito');
+            },
+            render: () => {
+                const db = storage.get();
+                const container = document.getElementById('cart-content');
+                
+                if (db.cart.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align:center; padding: 40px 20px;">
+                            <div style="font-size:48px; margin-bottom:20px;">🛒</div>
+                            <h3>Tu carrito está vacío</h3>
+                            <p style="color:#666; margin-bottom:20px;">¡Anímate a probar nuestros deliciosos bocaditos!</p>
+                            <button class="btn" onclick="ui.navigate('catalog')">Ver Catálogo</button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                let total = 0;
+                
+                db.cart.forEach(item => {
+                    const subtotal = item.price * item.qty;
+                    total += subtotal;
+                    html += `
+                        <div class="cart-item">
+                            <div>
+                                <strong style="font-size:18px;">${item.name}</strong><br>
+                                <span style="color:#666;">Precio: S/ ${item.price}</span>
+                            </div>
+                            <div class="controls">
+                                <button class="btn btn-outline" onclick="cart.updateQty(${item.id}, -1)">-</button>
+                                <span style="font-weight:bold; width:30px; text-align:center;">${item.qty}</span>
+                                <button class="btn btn-outline" onclick="cart.updateQty(${item.id}, 1)">+</button>
+                                <button class="btn" style="background-color: var(--red); border-color: var(--red); margin-left: 15px;" onclick="cart.remove(${item.id})">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                    <div class="cart-total">
+                        Total a Pagar: <span style="color:var(--brown);">S/ ${total}</span>
+                    </div>
+                    <button class="btn" style="width: 100%; margin-top: 25px; font-size:18px;" onclick="cart.checkout()">Proceder al Pago</button>
+                `;
+                
+                container.innerHTML = html;
+            },
+            checkout: () => {
+                const db = storage.get();
+                if (!db.currentUser) {
+                    ui.showToast('Por favor, inicia sesión o regístrate para continuar');
+                    ui.navigate('login');
+                    return;
+                }
+                
+                if (db.currentUser.address) {
+                    document.getElementById('order-address').value = db.currentUser.address;
+                }
+                
+                // Set default date to today
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('order-date').value = today;
+                
+                ui.navigate('checkout');
+            }
+        };
+
+        /**
+         * ORDERS MODULE
+         */
+        const orders = {
+            statusFlow: ['Pendiente', 'Confirmado', 'En preparación', 'En camino', 'Entregado'],
+            getStatusClass: (status) => {
+                const map = {
+                    'Pendiente': 'pending',
+                    'Confirmado': 'confirmed',
+                    'En preparación': 'prep',
+                    'En camino': 'way',
+                    'Entregado': 'delivered'
+                };
+                return map[status] || 'pending';
+            },
+            showPaymentInfo: () => {
+                const method = document.getElementById('order-payment').value;
+                const info = document.getElementById('payment-info');
+                
+                if (!method) {
+                    info.classList.add('hidden');
+                    return;
+                }
+                
+                info.classList.remove('hidden');
+                
+                if (method === 'Yape' || method === 'Plin') {
+                    info.innerHTML = `
+                        <p style="font-weight:bold; margin-bottom:10px;">Escanea el QR para pagar con ${method}</p>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=PagoCakeIt" alt="QR ${method}">
+                        <p style="margin-top:10px; font-size:14px; color:#666;">Número: 999 888 777 (CakeIt SAC)</p>
+                    `;
+                } else if (method === 'Transferencia') {
+                    info.innerHTML = `
+                        <p style="font-weight:bold; margin-bottom:10px;">Datos para Transferencia Bancaria</p>
+                        <div style="text-align:left; background:#f0f0f0; padding:15px; border-radius:8px; display:inline-block;">
+                            <strong>Banco BCP</strong><br>
+                            Cuenta Soles: 191-98765432-0-12<br>
+                            CCI: 0021919876543201212<br>
+                            Titular: CakeIt SAC
+                        </div>
+                    `;
+                }
+            },
+            placeOrder: () => {
+                const date = document.getElementById('order-date').value;
+                const time = document.getElementById('order-time').value;
+                const address = document.getElementById('order-address').value;
+                const method = document.getElementById('order-payment').value;
+                const notes = document.getElementById('order-notes').value;
+                
+                if (!date || !time || !address || !method) {
+                    return ui.showToast('Por favor, completa todos los campos obligatorios');
+                }
+                
+                const db = storage.get();
+                const total = db.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+                
+                const newOrder = {
+                    id: Math.floor(100000 + Math.random() * 900000).toString(),
+                    phone: db.currentUser.phone,
+                    name: db.currentUser.name,
+                    items: [...db.cart],
+                    total,
+                    date,
+                    time,
+                    address,
+                    notes,
+                    method,
+                    status: 'Pendiente',
+                    createdAt: new Date().toISOString()
+                };
+                
+                db.orders.push(newOrder);
+                db.cart = []; // Empty cart
+                storage.set(db);
+                
+                // Clear form
+                document.getElementById('order-notes').value = '';
+                document.getElementById('order-payment').value = '';
+                document.getElementById('payment-info').classList.add('hidden');
+                
+                ui.updateNav();
+                ui.showToast('¡Tu pedido ha sido registrado con éxito!');
+                ui.navigate('user-dashboard');
+                
+                orders.simulateProgress(newOrder.id);
+            },
+            simulateProgress: (id) => {
+                // Simulation: advances state every 15 seconds
+                let step = 0;
+                const interval = setInterval(() => {
+                    step++;
+                    if (step >= orders.statusFlow.length) {
+                        clearInterval(interval);
+                        return;
+                    }
+                    
+                    const db = storage.get();
+                    const orderIndex = db.orders.findIndex(o => o.id === id);
+                    
+                    if (orderIndex !== -1 && db.orders[orderIndex].status !== 'Entregado') {
+                        // Only simulate if not manually changed by admin
+                        const currentStatusIndex = orders.statusFlow.indexOf(db.orders[orderIndex].status);
+                        if (step > currentStatusIndex) {
+                            db.orders[orderIndex].status = orders.statusFlow[step];
+                            storage.set(db);
+                            
+                            // Re-render active views if needed
+                            if (document.getElementById('user-dashboard').classList.contains('active')) auth.renderDashboard();
+                            if (document.getElementById('history').classList.contains('active')) orders.renderHistory();
+                            if (document.getElementById('admin-dashboard').classList.contains('active')) admin.render();
+                            
+                            if (db.orders[orderIndex].status === 'Entregado') {
+                                clearInterval(interval);
+                                if (db.currentUser && db.currentUser.phone === db.orders[orderIndex].phone) {
+                                    ui.showToast(`¡Tu pedido #${id} acaba de ser entregado!`);
+                                    orders.promptRating(id);
+                                }
+                            }
+                        }
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 15000);
+            },
+            renderHistory: () => {
+                const db = storage.get();
+                if (!db.currentUser) return;
+                
+                const tbody = document.getElementById('history-list');
+                const userOrders = db.orders.filter(o => o.phone === db.currentUser.phone).reverse();
+                
+                if (userOrders.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Aún no has realizado pedidos.</td></tr>';
+                    return;
+                }
+                
+                let html = '';
+                userOrders.forEach(o => {
+                    html += `
+                        <tr>
+                            <td><strong>#${o.id}</strong></td>
+                            <td>${o.date} ${o.time}</td>
+                            <td style="font-weight:bold;">S/ ${o.total}</td>
+                            <td><span class="badge bg-${orders.getStatusClass(o.status)}">${o.status}</span></td>
+                            <td>
+                                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                    <button class="btn btn-outline" style="padding: 6px 10px; font-size:12px;" onclick="orders.viewDetails('${o.id}')">Ver</button>
+                                    <button class="btn btn-outline" style="padding: 6px 10px; font-size:12px;" onclick="orders.repeatOrder('${o.id}')">Repetir</button>
+                                    ${o.status === 'Entregado' ? `<button class="btn" style="padding: 6px 10px; font-size:12px;" onclick="orders.promptRating('${o.id}')">Calificar</button>` : ''}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+            },
+            viewDetails: (id) => {
+                const db = storage.get();
+                const o = db.orders.find(ord => ord.id === id);
+                if (!o) return;
+                
+                let itemsHtml = o.items.map(i => `
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px; border-bottom:1px dashed #ccc;">
+                        <span>${i.qty}x ${i.name}</span>
+                        <span>S/ ${i.price * i.qty}</span>
+                    </div>
+                `).join('');
+                
+                const content = `
+                    <h2 style="margin-bottom:20px;">Detalle de Pedido #${o.id}</h2>
+                    <div style="text-align:left; background:var(--gray); padding:20px; border-radius:8px; margin-bottom:20px;">
+                        <p><strong>Estado:</strong> <span class="badge bg-${orders.getStatusClass(o.status)}">${o.status}</span></p>
+                        <p><strong>Fecha/Hora:</strong> ${o.date} a las ${o.time}</p>
+                        <p><strong>Dirección:</strong> ${o.address}</p>
+                        <p><strong>Método de Pago:</strong> ${o.method}</p>
+                        ${o.notes ? `<p><strong>Notas:</strong> ${o.notes}</p>` : ''}
+                    </div>
+                    <div style="text-align:left;">
+                        <h4 style="margin-bottom:10px;">Productos</h4>
+                        ${itemsHtml}
+                        <h3 style="text-align:right; margin-top:15px; color:var(--brown);">Total: S/ ${o.total}</h3>
+                    </div>
+                    <button class="btn" style="margin-top:25px; width:100%;" onclick="ui.closeModal()">Cerrar</button>
+                `;
+                ui.showModal(content);
+            },
+            repeatOrder: (id) => {
+                const db = storage.get();
+                const o = db.orders.find(ord => ord.id === id);
+                if (!o) return;
+                
+                o.items.forEach(item => {
+                    const existing = db.cart.find(c => c.id === item.id);
+                    if (existing) {
+                        existing.qty += item.qty;
+                    } else {
+                        db.cart.push({ ...item });
+                    }
+                });
+                
+                storage.set(db);
+                ui.updateNav();
+                ui.showToast('Productos agregados al carrito');
+                ui.navigate('cart');
+            },
+            promptRating: (id) => {
+                const content = `
+                    <h2 style="margin-bottom:15px;">¡Tu pedido fue entregado!</h2>
+                    <p style="color:#666; margin-bottom:20px;">Ayúdanos a mejorar calificando tu experiencia (Pedido #${id})</p>
+                    
+                    <div class="form-group">
+                        <label>Puntuación</label>
+                        <select id="rating-stars" style="font-size:20px; text-align:center;">
+                            <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
+                            <option value="4">⭐⭐⭐⭐ Muy Bueno</option>
+                            <option value="3">⭐⭐⭐ Bueno</option>
+                            <option value="2">⭐⭐ Regular</option>
+                            <option value="1">⭐ Malo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Déjanos un comentario</label>
+                        <textarea id="rating-text" rows="4" placeholder="¿Qué te parecieron nuestros bocaditos?"></textarea>
+                    </div>
+                    <button class="btn" style="width:100%" onclick="orders.submitRating('${id}')">Enviar Calificación</button>
+                    <button class="btn btn-outline" style="width:100%; margin-top:10px;" onclick="ui.closeModal()">Ahora no</button>
+                `;
+                ui.showModal(content);
+            },
+            submitRating: (id) => {
+                const stars = parseInt(document.getElementById('rating-stars').value);
+                const text = document.getElementById('rating-text').value.trim();
+                
+                if (!text) return ui.showToast('Por favor, escribe un breve comentario.');
+                
+                const db = storage.get();
+                db.comments.push({
+                    user: db.currentUser.name,
+                    rating: stars,
+                    text: text
+                });
+                storage.set(db);
+                
+                ui.closeModal();
+                ui.showToast('¡Gracias por tu opinión!');
+                ui.renderComments();
+            }
+        };
+
+        /**
+         * ADMIN MODULE
+         */
+        const admin = {
+            render: () => {
+                const db = storage.get();
+                
+                // Dashboard Stats
+                document.getElementById('admin-stats-clients').textContent = db.users.filter(u => u.role !== 'admin').length;
+                document.getElementById('admin-stats-orders').textContent = db.orders.length;
+                
+                const totalSales = db.orders.reduce((sum, o) => sum + o.total, 0);
+                document.getElementById('admin-stats-sales').textContent = `S/ ${totalSales.toFixed(2)}`;
+                
+                // Orders Table
+                const tbody = document.getElementById('admin-orders-list');
+                const sortedOrders = [...db.orders].reverse(); // Newest first
+                
+                if (sortedOrders.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay pedidos registrados</td></tr>';
+                    return;
+                }
+                
+                let html = '';
+                sortedOrders.forEach(o => {
+                    const statusOptions = orders.statusFlow.map(s => 
+                        `<option value="${s}" ${s === o.status ? 'selected' : ''}>${s}</option>`
+                    ).join('');
+                    
+                    html += `
+                        <tr>
+                            <td><strong>#${o.id}</strong><br><small>${o.createdAt.split('T')[0]}</small></td>
+                            <td>${o.name}<br><small style="color:#666;">${o.phone}</small></td>
+                            <td style="font-weight:bold;">S/ ${o.total}</td>
+                            <td><span class="badge bg-${orders.getStatusClass(o.status)}">${o.status}</span></td>
+                            <td>
+                                <select onchange="admin.changeStatus('${o.id}', this.value)" style="padding:6px; border-radius:4px; border:1px solid #ccc;">
+                                    ${statusOptions}
+                                </select>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+            },
+            changeStatus: (id, newStatus) => {
+                const db = storage.get();
+                const order = db.orders.find(o => o.id === id);
+                if (order) {
+                    order.status = newStatus;
+                    storage.set(db);
+                    ui.showToast(`Estado del pedido #${id} actualizado a ${newStatus}`);
+                    admin.render();
+                }
+            }
+        };
+
+        /**
+         * START APP
+         */
+        window.onload = () => {
+            // Setup DB if empty
+            if (!localStorage.getItem(DB_KEY)) {
+                storage.set(defaultData);
+            }
+            
+            ui.updateNav();
+            products.renderFeatured();
+            ui.renderComments();
+            
+            const db = storage.get();
+            if(db.currentUser && db.currentUser.role === 'admin') {
+                ui.navigate('admin-dashboard');
+            } else {
+                ui.navigate('home');
+            }
+        };
+    </script>
+</body>
+</html>
